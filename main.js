@@ -605,7 +605,7 @@ window.addEventListener('beforeprint', function () {
   });
   add('.sec-head, .contact .wrap', 'rv-head');
   add('.board img, .project-media, .ev-media, .role-media, .gallery img, .demo-stage', 'rv-wipe');
-  add('.project, .demo, .board figcaption, .ev, .role, .award, .focus-item, .news-list li, .sg, .edu, .cl, .quote, .sub-item, .tdi-stats, .job-body > *, .job-when, .skill-note, .snapshot', 'rv-up');
+  add('.project, .demo, .board-cap, .ev, .role, .award, .focus-item, .news-list li, .sg, .edu, .cl, .quote, .sub-item, .tdi-stats, .job-body > *, .job-when, .skill-note, .snapshot', 'rv-up');
   add('.path', 'rv-path');
   html.classList.add('rvj');
 
