@@ -446,3 +446,36 @@
     });
   });
 })();
+
+/* ---------- v12: count-up numbers and map reveal (once, on scroll) ---------- */
+(function () {
+  'use strict';
+  document.documentElement.classList.add('js');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var map = document.querySelector('.inmap');
+  var nums = [];
+  Array.prototype.forEach.call(document.querySelectorAll('.stat-grid b, .metrics b, .tdi-stats dd'), function (el) {
+    var m = /^(\d+)(.*)$/.exec(el.textContent);
+    if (m && el.children.length === 0) { el.dataset.final = el.textContent; nums.push({ el: el, n: +m[1], rest: m[2] }); }
+  });
+  if (reduce || !('IntersectionObserver' in window)) { if (map) map.classList.add('in'); return; }
+  nums.forEach(function (o) { o.el.textContent = '0' + o.rest; });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      if (e.target === map) { map.classList.add('in'); return; }
+      var o = nums.filter(function (x) { return x.el === e.target; })[0], t0 = performance.now(), D = 900 + Math.min(700, o.n * 3);
+      (function f(now) {
+        var k = Math.min(1, (now - t0) / D); k = 1 - Math.pow(1 - k, 3);
+        o.el.textContent = Math.round(o.n * k) + o.rest;
+        if (k < 1) requestAnimationFrame(f);
+      })(t0);
+    });
+  }, { threshold: 0.4 });
+  nums.forEach(function (o) { io.observe(o.el); });
+  if (map) io.observe(map);
+})();
+window.addEventListener('beforeprint', function () {
+  Array.prototype.forEach.call(document.querySelectorAll('.stat-grid b, .metrics b, .tdi-stats dd'), function (el) { if (el.dataset.final) el.textContent = el.dataset.final; });
+});
