@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nicholaswahlman.github.io/sitemap.xml

@@ -14,8 +14,14 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; backgro
 .k i { width: 40px; height: 2px; background: #9E2A3A; position: relative; } .k i::after { content: ""; position: absolute; right: -4px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: #9E2A3A; }
 h1 { font-weight: 800; font-size: clamp(2.2rem, 7vw, 4rem); margin: 18px 0 10px; letter-spacing: -.03em; color: #fff; }
 p { color: #9DB0C4; margin: 0 0 28px; }
+.sign { background: #05080C; border: 1px solid #2A3644; border-radius: 3px; padding: 12px; box-shadow: inset 0 0 0 3px #0C1219; margin: 26px 0 30px; width: min(560px, 100%); box-sizing: border-box; }
+.sign canvas { display: block; width: 100%; aspect-ratio: 111 / 29; }
+main { width: min(560px, 100%); }
 a { display: inline-block; background: #9E2A3A; color: #fff; text-decoration: none; font-weight: 700; padding: 14px 24px; }
 </style>
 </head>
-<body><main><p class="k"><i></i>Error 404</p><h1>Wrong exit.</h1><p>That page doesn't exist. Let's get you back on route.</p><a href="/">Back to the portfolio</a></main></body>
+<body><main><p class="k"><i></i>Error 404</p><h1>Wrong exit.</h1><div class="sign"><canvas role="img" aria-label="Message sign reading: Exit 404, page not found, use link below"></canvas></div><p>That page doesn't exist. Let's get you back on route.</p><a href="/">Back to the portfolio</a></main>
+<script src="/dms.js?v=1"></script>
+<script>if (window.DMS) window.DMS(document.querySelector('.sign canvas')).set(['EXIT 404', 'PAGE NOT FOUND', 'USE LINK BELOW'], true);</script>
+</body>
 </html>

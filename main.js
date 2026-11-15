@@ -376,7 +376,9 @@
     draw();
   }
 
-  var running = false, visible = false, lastT = 0;
+  var running = false, visible = false, lastT = 0, paused = false;
+  var pauseBtn = root.querySelector('.demo-pause');
+  if (pauseBtn) { if (reduce) pauseBtn.hidden = true; pauseBtn.addEventListener('click', function () { paused = !paused; pauseBtn.setAttribute('aria-pressed', String(paused)); pauseBtn.textContent = paused ? 'Play' : 'Pause'; paused ? stop() : start(); }); }
   function loop(now) {
     if (!running) return;
     var dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
@@ -384,7 +386,7 @@
     draw();
     requestAnimationFrame(loop);
   }
-  function start() { if (running || reduce || !visible || document.hidden) return; running = true; lastT = performance.now(); requestAnimationFrame(loop); }
+  function start() { if (running || reduce || paused || !visible || document.hidden) return; running = true; lastT = performance.now(); requestAnimationFrame(loop); }
   function stop() { running = false; }
 
   Array.prototype.forEach.call(root.querySelectorAll('.seg button'), function (b) { b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); }); });
@@ -417,6 +419,7 @@
   btn.addEventListener('click', function () {
     cancelAnimationFrame(raf);
     if (reduce) { setRace(TOTAL); return; }
+    var flow = calc.querySelector('.flow'); if (flow) { flow.classList.remove('run'); void flow.offsetWidth; flow.classList.add('run'); }
     var t0 = performance.now(); btn.disabled = true; btn.textContent = 'Running…';
     (function f(now) {
       var t = (now - t0) / 1000 * SPEED; setRace(t);
@@ -479,3 +482,157 @@
 window.addEventListener('beforeprint', function () {
   Array.prototype.forEach.call(document.querySelectorAll('.stat-grid b, .metrics b, .tdi-stats dd'), function (el) { if (el.dataset.final) el.textContent = el.dataset.final; });
 });
+
+/* ---------- v13: message sign in the TMC panel ---------- */
+(function () {
+  'use strict';
+  var box = document.getElementById('dms-demo');
+  if (!box || !window.DMS) return;
+  var sign = window.DMS(box.querySelector('canvas'));
+  var inputs = box.querySelectorAll('input'), presets = box.querySelectorAll('.dms-presets button');
+  function load(msg, instant) {
+    var parts = msg.split('|');
+    for (var i = 0; i < 3; i++) inputs[i].value = parts[i] || '';
+    sign.set(parts, instant);
+  }
+  Array.prototype.forEach.call(presets, function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(presets, function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      load(b.getAttribute('data-msg'));
+    });
+  });
+  Array.prototype.forEach.call(inputs, function (inp) {
+    inp.addEventListener('input', function () {
+      var v = sign.clean(inp.value); if (v !== inp.value) inp.value = v;
+      Array.prototype.forEach.call(presets, function (o) { o.setAttribute('aria-pressed', 'false'); });
+      sign.set([inputs[0].value, inputs[1].value, inputs[2].value], true);
+    });
+  });
+  load(presets[0].getAttribute('data-msg'), true);
+  // the panel is hidden until opened, so size the canvas when it becomes visible
+  var dlg = box.closest('dialog');
+  if (dlg && 'MutationObserver' in window) new MutationObserver(function () { if (dlg.open) requestAnimationFrame(sign.draw); }).observe(dlg, { attributes: true, attributeFilter: ['open'] });
+})();
+
+/* ---------- v13: skills link to the work they were used in ---------- */
+(function () {
+  'use strict';
+  var note = document.querySelector('.skill-note');
+  if (!note) return;
+  var text = note.querySelector('.skill-note-text'), open = note.querySelector('.skill-note-open'), btns = document.querySelectorAll('.chip-btn');
+  Array.prototype.forEach.call(btns, function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(btns, function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      text.innerHTML = '';
+      var strong = document.createElement('strong'); strong.textContent = b.textContent + ': ';
+      text.appendChild(strong); text.appendChild(document.createTextNode(b.getAttribute('data-note')));
+      open.hidden = false; open.setAttribute('data-case', b.getAttribute('data-open'));
+    });
+  });
+  open.addEventListener('click', function () {
+    var d = document.getElementById(open.getAttribute('data-case'));
+    if (d && d.showModal && !d.open) { var hit = document.querySelector('.project-hit[data-case="' + d.id + '"]'); if (hit) hit.click(); }
+  });
+})();
+
+/* =====================================================================
+   v14: motion. Everything here is progressive: without JS, without
+   IntersectionObserver, or with reduced motion, content is simply shown.
+   ===================================================================== */
+(function () {
+  'use strict';
+  var html = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var inDialog = function (el) { return !!el.closest('dialog'); };
+
+  /* ---- sliding indicator under the current menu item (desktop) ---- */
+  var nav = document.getElementById('site-nav');
+  if (nav) {
+    var ink = document.createElement('span'); ink.className = 'nav-ink'; ink.setAttribute('aria-hidden', 'true'); nav.appendChild(ink);
+    html.classList.add('has-ink');
+    var placeInk = function () {
+      var a = nav.querySelector('a.is-active:not(.nav-cta)');
+      if (!a) { ink.style.opacity = '0'; return; }
+      ink.style.opacity = '1'; ink.style.width = a.offsetWidth + 'px'; ink.style.transform = 'translateX(' + a.offsetLeft + 'px)';
+    };
+    new MutationObserver(placeInk).observe(nav, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    window.addEventListener('resize', placeInk);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeInk);
+    placeInk();
+  }
+
+  /* ---- light that follows the pointer across the project cards ---- */
+  if (window.matchMedia('(hover: hover)').matches) {
+    $$('.project, .cl, .focus-item').forEach(function (card) {
+      card.classList.add('spot');
+      card.addEventListener('pointermove', function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px'); card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
+  }
+
+  /* ---- photo viewer: ease each photo in ---- */
+  var lbImg = document.querySelector('.lb-img');
+  if (lbImg && !reduce) lbImg.addEventListener('load', function () { lbImg.classList.remove('lb-anim'); void lbImg.offsetWidth; lbImg.classList.add('lb-anim'); });
+
+  /* ---- experience timeline fills as you read down it ---- */
+  var tl = document.querySelector('.timeline');
+  if (tl) {
+    var fill = document.createElement('span'); fill.className = 'tl-fill'; fill.setAttribute('aria-hidden', 'true'); tl.appendChild(fill);
+    var jobs = $$('.job', tl), tick = false;
+    var updateTl = function () {
+      tick = false;
+      var r = tl.getBoundingClientRect(), p = reduce ? 1 : Math.max(0, Math.min(1, (window.innerHeight * 0.62 - r.top) / r.height));
+      tl.style.setProperty('--tl', p.toFixed(4));
+      jobs.forEach(function (j) { j.classList.toggle('on', j.offsetTop + 10 <= p * r.height + 12); });
+    };
+    window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(updateTl); } }, { passive: true });
+    window.addEventListener('resize', updateTl); updateTl();
+  }
+
+  if (reduce || !('IntersectionObserver' in window)) return;
+
+  /* ---- reveal on scroll ---- */
+  var targets = [];
+  function add(sel, type) { $$(sel).forEach(function (el) { if (inDialog(el) || el.classList.contains('rv')) return; el.classList.add('rv', type); targets.push(el); }); }
+  // section headings: the red rule draws, the heading rises out of a mask
+  $$('.sec-head h2, .contact h2').forEach(function (h) {
+    var inner = document.createElement('span'); inner.className = 'h-in';
+    while (h.firstChild) inner.appendChild(h.firstChild);
+    h.appendChild(inner); h.classList.add('h-mask');
+  });
+  add('.sec-head, .contact .wrap', 'rv-head');
+  add('.project-media, .ev-media, .role-media, .gallery img, .demo-stage', 'rv-wipe');
+  add('.project, .demo, .ev, .role, .award, .focus-item, .news-list li, .sg, .edu, .cl, .quote, .sub-item, .tdi-stats, .job-body > *, .job-when, .skill-note, .snapshot', 'rv-up');
+  add('.path', 'rv-path');
+  html.classList.add('rvj');
+
+  // a clipped element has no visible area to observe, so wipes are triggered by their parent
+  var wipeKids = new Map();
+  var io = new IntersectionObserver(function (entries) {
+    var batch = [];
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      if (e.target.classList.contains('rv') && !e.target.classList.contains('rv-wipe')) batch.push(e.target);
+      (wipeKids.get(e.target) || []).forEach(function (k) { batch.push(k); });
+      wipeKids.delete(e.target); if (!e.target.classList.contains('rv')) io.unobserve(e.target);
+    });
+    batch.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+    batch.forEach(function (el, i) {
+      io.unobserve(el);
+      var d = Math.min(i, 6) * 70;
+      el.style.setProperty('--d', d + 'ms');
+      el.classList.add('in');
+      // once it has played, drop the helper classes so hover transitions behave normally
+      if (!el.classList.contains('rv-head') && !el.classList.contains('rv-path')) setTimeout(function () { el.classList.remove('rv', 'rv-up', 'rv-wipe', 'in'); el.style.removeProperty('--d'); }, d + 1300);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  targets.forEach(function (el) {
+    if (!el.classList.contains('rv-wipe')) { io.observe(el); return; }
+    var p = el.parentElement; if (!wipeKids.has(p)) { wipeKids.set(p, []); io.observe(p); }
+    wipeKids.get(p).push(el);
+  });
+  window.addEventListener('beforeprint', function () { targets.forEach(function (el) { el.classList.add('in'); }); });
+})();
