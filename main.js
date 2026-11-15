@@ -604,8 +604,8 @@ window.addEventListener('beforeprint', function () {
     h.appendChild(inner); h.classList.add('h-mask');
   });
   add('.sec-head, .contact .wrap', 'rv-head');
-  add('.project-media, .ev-media, .role-media, .gallery img, .demo-stage', 'rv-wipe');
-  add('.project, .demo, .ev, .role, .award, .focus-item, .news-list li, .sg, .edu, .cl, .quote, .sub-item, .tdi-stats, .job-body > *, .job-when, .skill-note, .snapshot', 'rv-up');
+  add('.board img, .project-media, .ev-media, .role-media, .gallery img, .demo-stage', 'rv-wipe');
+  add('.project, .demo, .board figcaption, .ev, .role, .award, .focus-item, .news-list li, .sg, .edu, .cl, .quote, .sub-item, .tdi-stats, .job-body > *, .job-when, .skill-note, .snapshot', 'rv-up');
   add('.path', 'rv-path');
   html.classList.add('rvj');
 
