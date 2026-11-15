@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" href="fonts/montserrat-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="img/headshot-cutout.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="styles.css?v=9">
+<link rel="stylesheet" href="styles.css?v=11">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -47,6 +47,7 @@
       <a href="#leadership">Leadership</a>
       <a href="#honors">Honors</a>
       <a href="#skills">Skills</a>
+      <a href="#vision">Vision</a>
       <a href="#contact" class="nav-cta">Contact</a>
     </nav>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span></span><span></span></button>
@@ -67,8 +68,9 @@
       <p class="hero-lead">Civil Engineering student at Trine University. I'm passionate about where technology meets transportation, and I'm building a career in ITS and modern traffic operations.</p>
       <div class="hero-actions">
         <a class="btn btn-solid" href="#work">View my work</a>
-        <a class="btn btn-line" href="#contact">Get in touch</a>
+        <a class="btn btn-line btn-dl" href="Nicholas_Wahlman_Resume.pdf" download="Nicholas_Wahlman_Resume.pdf"><svg aria-hidden="true" viewBox="0 0 16 16"><path d="M8 1.5v8.5M4.5 6.5 8 10l3.5-3.5M2.5 13.5h11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Download resume</a>
       </div>
+      <p class="rev">PDF <span class="sep">|</span> Last revised November 2026</p>
     </div>
     <div class="hero-portrait">
       <div class="glow" aria-hidden="true"></div>
@@ -161,6 +163,34 @@
         </div>
       </article>
     </div>
+
+    <div class="demo ix" id="signal-demo">
+      <div class="demo-stage">
+        <canvas width="600" height="600" role="img" aria-label="Animated top-down view of the example intersection of Franklin Ave and Maple Ln. Under all-way stop control, vehicles queue on Franklin Ave. Under signal control, the queues clear."></canvas>
+        <span class="demo-badge">Simplified animation</span>
+      </div>
+      <div class="demo-panel">
+        <p class="tag">Interactive <span class="sep">|</span> Example Synchro 12 model</p>
+        <h3>Signal or all-way stop?</h3>
+        <p class="demo-lead">Switch the control type at Franklin Ave and Maple Ln and compare how each approach performs.</p>
+        <div class="seg" role="group" aria-label="Intersection control type">
+          <button type="button" data-mode="awsc" aria-pressed="true">All-way stop</button>
+          <button type="button" data-mode="signal" aria-pressed="false">Signal</button>
+        </div>
+        <p class="crit" aria-live="polite"><b class="crit-num">102.3 s</b><span class="crit-label">delay on the critical approach (NB)</span><span class="crit-delta"></span></p>
+        <table class="appr">
+          <caption class="sr">Level of service and delay by approach</caption>
+          <thead><tr><th scope="col">Approach</th><th scope="col">LOS</th><th scope="col">Delay</th></tr></thead>
+          <tbody>
+            <tr data-app="NB"><th scope="row"><b>NB</b><span>Franklin Ave</span></th><td class="c-los"><i class="los"></i></td><td class="c-dly"><span class="bar" aria-hidden="true"><span></span></span><b class="dly"></b></td></tr>
+            <tr data-app="SB"><th scope="row"><b>SB</b><span>Franklin Ave</span></th><td class="c-los"><i class="los"></i></td><td class="c-dly"><span class="bar" aria-hidden="true"><span></span></span><b class="dly"></b></td></tr>
+            <tr data-app="EB"><th scope="row"><b>EB</b><span>Maple Ln</span></th><td class="c-los"><i class="los"></i></td><td class="c-dly"><span class="bar" aria-hidden="true"><span></span></span><b class="dly"></b></td></tr>
+            <tr data-app="WB"><th scope="row"><b>WB</b><span>Maple Ln</span></th><td class="c-los"><i class="los"></i></td><td class="c-dly"><span class="bar" aria-hidden="true"><span></span></span><b class="dly"></b></td></tr>
+          </tbody>
+        </table>
+        <p class="demo-note">LOS and delay come from my example Synchro 12 model, a fictional corridor with data modified for confidentiality. The vehicle animation is a simplified illustration, not the Synchro simulation.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -168,11 +198,22 @@
 <section id="experience" class="section band" aria-labelledby="exp-title">
   <div class="band-bg bg-construction" aria-hidden="true"></div>
   <div class="wrap">
+    <div class="exp-top">
     <header class="sec-head">
       <p class="kicker"><span class="rule" aria-hidden="true"></span><span>Experience</span></p>
       <h2 id="exp-title">Indiana Department of Transportation</h2>
       <p class="sec-lead">Two summers in the Seymour District, first in construction and then in traffic and safety.</p>
     </header>
+      <figure class="inmap">
+        <svg viewBox="-6 -8 470 316" role="img" aria-label="Map of Indiana marking Angola (Trine University), Indianapolis (INDOT Traffic Management Center) and Seymour (INDOT Seymour District)">
+          <path class="state" d="M33.2,3.9L36.3,6.6L38.8,5.3L40.2,6.3L39,8.9L44.6,10.3L50.6,10.3L56.4,8.7L67.2,3.8L73.6,0L92.3,0.1L133.4,0.1L172.2,0.1L190.2,0L190.2,4.8L190.4,20.5L190.4,109.6L189.8,137.9L189.8,166.4L189.4,184.3L189.4,199.7L185.4,202.6L188.3,208.5L188.7,210.5L186.5,213L187.1,215.4L190.6,215.8L191.4,217.4L188.7,220.4L190,223.2L185.4,223L182.1,224.5L180.2,224.2L173,228.3L170.1,230.8L166.1,230.2L164.1,227.4L158.7,227.8L155.4,227.4L152.9,229.5L153.7,237.6L154.9,242.2L151.6,244.8L150.2,247.6L143.9,249.8L140,260.2L136.1,262.7L133.2,261.2L131.1,262L129.8,266.1L126.5,270.7L126.7,276.4L125.7,280.9L124,282.4L119.3,283.6L118.4,285.9L115.7,282.2L111.2,282.1L105.8,278.5L105.6,272.5L101.2,268.1L99.6,268.3L99.8,270.5L102.5,271.2L102.3,272.9L99.6,273L97.9,274.9L96.2,273.4L94.4,275.3L96.2,276.4L95,279.1L91.3,279.6L90.8,285.7L91.9,288.2L87.1,288.8L86.7,292.8L84.4,294.7L83,293.2L84,289.9L81.9,289.2L79.9,290.8L77.8,289.4L75.3,283.7L71.8,283.8L68.9,287.1L62.8,288.9L60.8,290.8L59.7,297.1L58.3,298.8L56,299L54.3,295L50.6,294.2L46,290.5L41.5,287.7L37.3,287.3L34.4,289.7L31.5,288.4L30.3,285.3L28.6,284.9L27.2,289.1L29.5,293.3L26.8,295.9L24.5,295.7L25.1,292.1L24.1,290.1L15.3,292.1L13.1,288.8L11.2,288.5L9.1,291.1L11.2,297L8.7,300L3.9,297.9L1.7,297.8L0.8,295.6L3.3,296.2L0,290.2L5,290.8L1.9,288.9L5,284.6L5.2,280.7L3.5,279L7.5,277.8L7.9,275.3L5.4,276.5L10,271.8L7.1,268L6.2,264.1L8.1,264.8L10,260.4L11,262.7L12.4,260L14.1,262.1L16.8,255.5L18.5,255L21.2,249.5L20.7,247.1L25.7,244.4L25.7,240.1L27.6,234.7L29,232.7L31.9,231.9L34.8,227L34.6,224.3L31.5,218.2L33.8,211L30.1,208.4L30.3,203.3L27,199.8L26.3,195.1L30.3,191.2L28.4,188L28.8,184.1L30.1,182L32.8,181.4L32.8,159L32.6,133.4L32.8,113.6L33,97.6L33,20.4L33.2,3.9Z"/>
+          <g><path class="lead" d="M179.0,9.4L202.7,16L222,16"/><circle class="halo" cx="179.0" cy="9.4" r="7"/><circle class="pin" cx="179.0" cy="9.4" r="3.4"/><text class="mn" x="230" y="15">Angola</text><text class="ms" x="230" y="30">Trine University, ASCE T&amp;DI</text></g>
+          <g><path class="lead" d="M112.1,149.9L172.5,150L222,150"/><circle class="halo" cx="112.1" cy="149.9" r="7"/><circle class="pin" cx="112.1" cy="149.9" r="3.4"/><text class="mn" x="230" y="149">Indianapolis</text><text class="ms" x="230" y="164">INDOT Traffic Management Center</text></g>
+          <g><path class="lead" d="M127.6,210.7L179.5,214L222,214"/><circle class="halo" cx="127.6" cy="210.7" r="7"/><circle class="pin" cx="127.6" cy="210.7" r="3.4"/><text class="mn" x="230" y="213">Seymour</text><text class="ms" x="230" y="228">INDOT Seymour District, 2025 &amp; 2026</text></g>
+        </svg>
+        <figcaption>Where I've worked and studied</figcaption>
+      </figure>
+    </div>
 
     <ol class="timeline">
       <li class="job">
@@ -358,14 +399,14 @@
         <p class="award-year">July 2026</p>
         <h3>Collaboration Award</h3>
         <p class="award-org">Governor's Summer Intern Program, State of Indiana</p>
-        <p>One of 17 recipients statewide across 160+ GSI interns from all Indiana state agencies, for cross-agency partnership building with the INDOT Seymour District traffic and safety team.</p>
+        <p>One of 17 recipients statewide across 160+ GSIs from all Indiana state agencies, for cross-agency partnership building with the INDOT Seymour District traffic and safety team.</p>
         <a class="ext" href="https://www.in.gov/spd/employee-resources/the-torch/employee-central-home/gsi-program-wraps-up-with-awards-ceremony" target="_blank" rel="noopener">State of Indiana announcement</a>
-        <div class="gallery g3 tight">
-          <img data-zoom src="img/collab-award-ceremony.jpg" alt="Accepting the Collaboration Award at the GSI ceremony" loading="lazy" decoding="async" width="1439" height="637">
-          <img data-zoom src="img/collab-award-team.jpg" alt="With my INDOT Seymour District supervisors after the award" loading="lazy" decoding="async" width="1600" height="926">
-          <img data-zoom src="img/collab-award-certificate.jpg" alt="Collaboration Award certificate" loading="lazy" decoding="async" width="1400" height="987">
-        </div>
       </article>
+    </div>
+    <div class="gallery g3 honor-photos">
+      <img data-zoom src="img/collab-award-ceremony.jpg" alt="Accepting the Collaboration Award at the GSI ceremony" loading="lazy" decoding="async" width="1439" height="637">
+      <img data-zoom src="img/collab-award-team.jpg" alt="With my INDOT Seymour District supervisors after the award" loading="lazy" decoding="async" width="1600" height="926">
+      <img data-zoom src="img/collab-award-certificate.jpg" alt="Collaboration Award certificate" loading="lazy" decoding="async" width="1400" height="987">
     </div>
   </div>
 </section>
@@ -405,6 +446,37 @@
 </section>
 
 <!-- ================= CONTACT ================= -->
+<section id="vision" class="section band band-vision" aria-labelledby="vision-title">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="kicker"><span class="rule" aria-hidden="true"></span><span>Vision</span></p>
+      <h2 id="vision-title">Where I'm headed</h2>
+      <p class="sec-lead">I've always loved technology, and transportation is where I want to put it to work. My goal is to help pioneer ITS and smart mobility in Indiana: connected and automated vehicles, smarter traffic operations, and data that makes roads safer and more efficient.</p>
+    </header>
+
+    <div class="focus">
+      <article class="focus-item">
+        <h3>Connected &amp; automated vehicles</h3>
+        <p>How CAV technology and vehicle data can change the way agencies manage traffic and respond to safety problems.</p>
+      </article>
+      <article class="focus-item">
+        <h3>Traffic operations &amp; TSMO</h3>
+        <p>Getting more out of the roads we already have through signals, ramp metering, and tools like dynamic shoulder lanes.</p>
+      </article>
+      <article class="focus-item">
+        <h3>Data-driven safety</h3>
+        <p>Using crash, volume, and connected vehicle data to find problems sooner and fix them with fewer field visits.</p>
+      </article>
+    </div>
+
+    <ol class="path">
+      <li><span class="path-when">Now</span><h4>Build the foundation</h4><p>B.S. in Civil Engineering at Trine University, hands-on work at INDOT, and growing T&amp;DI.</p></li>
+      <li><span class="path-when">Next</span><h4>Get into ITS</h4><p>Gain experience in ITS and traffic operations and earn my EIT.</p></li>
+      <li><span class="path-when">Long term</span><h4>Shape what's next</h4><p>Earn my PE and help lead how Indiana brings new technology onto its roads.</p></li>
+    </ol>
+  </div>
+</section>
+
 <section id="contact" class="contact" aria-labelledby="contact-title">
   <div class="wrap">
     <p class="kicker"><span class="rule" aria-hidden="true"></span><span>Contact</span></p>
@@ -420,9 +492,10 @@
         <span class="cl-label">LinkedIn</span>
         <a href="https://www.linkedin.com/in/nicholaswahlman" target="_blank" rel="noopener">linkedin.com/in/nicholaswahlman</a>
       </div>
-      <div class="cl">
-        <span class="cl-label">Based in</span>
-        <span class="cl-text">Indiana</span>
+      <div class="cl cl-resume">
+        <span class="cl-label">Resume</span>
+        <a href="Nicholas_Wahlman_Resume.pdf" download="Nicholas_Wahlman_Resume.pdf">Download PDF</a>
+        <span class="cl-sub">Last revised November 2026</span>
       </div>
     </div>
   </div>
@@ -454,6 +527,24 @@
         </ul>
         <h3>The result</h3>
         <p>Entry time dropped from 72 seconds to about 2 seconds per case, a 97% reduction. The workflow has been live since July 24, 2026, and keeps running and gathering data as case volume grows. In the run analytics shown, it completed 67 runs with a 96.9% action success rate.</p>
+        <h3>See the difference</h3>
+        <div class="calc">
+          <div class="race">
+            <div class="race-row"><span class="race-name">Manual entry</span><span class="race-track"><span class="race-fill" data-secs="72"></span></span><b class="race-time">72.0 s</b></div>
+            <div class="race-row"><span class="race-name">Workflow</span><span class="race-track"><span class="race-fill fast" data-secs="2"></span></span><b class="race-time">2.0 s</b></div>
+            <div class="race-ctl"><button type="button" class="race-btn">Run one case</button><span class="race-note">Played at 12&times; speed</span></div>
+          </div>
+          <div class="calc-in">
+            <label for="cases">Cases per year</label><output for="cases" id="cases-out">520</output>
+            <input type="range" id="cases" min="100" max="2000" step="10" value="520">
+          </div>
+          <dl class="calc-out">
+            <div><dt>Manual entry</dt><dd id="calc-manual">10.4 hr</dd></div>
+            <div><dt>With the workflow</dt><dd id="calc-auto">17 min</dd></div>
+            <div class="hl"><dt>Time saved per year</dt><dd id="calc-saved">10.1 hr</dd></div>
+          </dl>
+          <p class="calc-note">Uses 72 seconds per case before and about 2 seconds after. The district handled an estimated 520 cases a year.</p>
+        </div>
       </div>
       <aside class="case-side">
         <dl>
@@ -489,6 +580,7 @@
         <p>Completed 10 intersection capacity studies in HCS 2026 using Miovision data, including all-way stop conversions.</p>
         <h3>Training</h3>
         <p>Took the Synchro Studio 12 training put on by INDOT Central Office, covering model calibration, simulation evaluation, and innovative intersection modeling.</p>
+        <p><button type="button" class="linkbtn" data-goto="signal-demo">Try the interactive comparison</button></p>
         <h3>About the example above</h3>
         <p>Project data is confidential, so I built a separate example model on my own, coding the geometry, lane configurations, and signal timing myself. In it, all-way stop control left the critical approach at LOS F with 102 seconds of delay. Signal control cut that delay by 86% to 14 seconds (LOS B). It shows my analytical approach only.</p>
       </div>
@@ -582,6 +674,6 @@
   </div>
 </dialog>
 
-<script src="main.js?v=9" defer></script>
+<script src="main.js?v=11" defer></script>
 </body>
 </html>
