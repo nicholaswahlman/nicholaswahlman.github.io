@@ -457,7 +457,7 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var map = document.querySelector('.inmap');
   var nums = [];
-  Array.prototype.forEach.call(document.querySelectorAll('.stat-grid b, .metrics b, .tdi-stats dd'), function (el) {
+  Array.prototype.forEach.call(document.querySelectorAll('.no-countup'), function (el) {
     var m = /^(\d+)(.*)$/.exec(el.textContent);
     if (m && el.children.length === 0) { el.dataset.final = el.textContent; nums.push({ el: el, n: +m[1], rest: m[2] }); }
   });
@@ -562,77 +562,8 @@ window.addEventListener('beforeprint', function () {
     placeInk();
   }
 
-  /* ---- light that follows the pointer across the project cards ---- */
-  if (window.matchMedia('(hover: hover)').matches) {
-    $$('.project, .cl, .focus-item').forEach(function (card) {
-      card.classList.add('spot');
-      card.addEventListener('pointermove', function (e) {
-        var r = card.getBoundingClientRect();
-        card.style.setProperty('--mx', (e.clientX - r.left) + 'px'); card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-      });
-    });
-  }
-
   /* ---- photo viewer: ease each photo in ---- */
   var lbImg = document.querySelector('.lb-img');
-  if (lbImg && !reduce) lbImg.addEventListener('load', function () { lbImg.classList.remove('lb-anim'); void lbImg.offsetWidth; lbImg.classList.add('lb-anim'); });
 
-  /* ---- experience timeline fills as you read down it ---- */
-  var tl = document.querySelector('.timeline');
-  if (tl) {
-    var fill = document.createElement('span'); fill.className = 'tl-fill'; fill.setAttribute('aria-hidden', 'true'); tl.appendChild(fill);
-    var jobs = $$('.job', tl), tick = false;
-    var updateTl = function () {
-      tick = false;
-      var r = tl.getBoundingClientRect(), p = reduce ? 1 : Math.max(0, Math.min(1, (window.innerHeight * 0.62 - r.top) / r.height));
-      tl.style.setProperty('--tl', p.toFixed(4));
-      jobs.forEach(function (j) { j.classList.toggle('on', j.offsetTop + 10 <= p * r.height + 12); });
-    };
-    window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(updateTl); } }, { passive: true });
-    window.addEventListener('resize', updateTl); updateTl();
-  }
 
-  if (reduce || !('IntersectionObserver' in window)) return;
-
-  /* ---- reveal on scroll ---- */
-  var targets = [];
-  function add(sel, type) { $$(sel).forEach(function (el) { if (inDialog(el) || el.classList.contains('rv')) return; el.classList.add('rv', type); targets.push(el); }); }
-  // section headings: the red rule draws, the heading rises out of a mask
-  $$('.sec-head h2, .contact h2').forEach(function (h) {
-    var inner = document.createElement('span'); inner.className = 'h-in';
-    while (h.firstChild) inner.appendChild(h.firstChild);
-    h.appendChild(inner); h.classList.add('h-mask');
-  });
-  add('.sec-head, .contact .wrap', 'rv-head');
-  add('.board img, .project-media, .ev-media, .role-media, .gallery img, .demo-stage', 'rv-wipe');
-  add('.project, .demo, .board-cap, .ev, .role, .award, .focus-item, .news-list li, .sg, .edu, .cl, .quote, .sub-item, .tdi-stats, .job-body > *, .job-when, .skill-note, .snapshot', 'rv-up');
-  add('.path', 'rv-path');
-  html.classList.add('rvj');
-
-  // a clipped element has no visible area to observe, so wipes are triggered by their parent
-  var wipeKids = new Map();
-  var io = new IntersectionObserver(function (entries) {
-    var batch = [];
-    entries.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      if (e.target.classList.contains('rv') && !e.target.classList.contains('rv-wipe')) batch.push(e.target);
-      (wipeKids.get(e.target) || []).forEach(function (k) { batch.push(k); });
-      wipeKids.delete(e.target); if (!e.target.classList.contains('rv')) io.unobserve(e.target);
-    });
-    batch.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
-    batch.forEach(function (el, i) {
-      io.unobserve(el);
-      var d = Math.min(i, 6) * 70;
-      el.style.setProperty('--d', d + 'ms');
-      el.classList.add('in');
-      // once it has played, drop the helper classes so hover transitions behave normally
-      if (!el.classList.contains('rv-head') && !el.classList.contains('rv-path')) setTimeout(function () { el.classList.remove('rv', 'rv-up', 'rv-wipe', 'in'); el.style.removeProperty('--d'); }, d + 1300);
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-  targets.forEach(function (el) {
-    if (!el.classList.contains('rv-wipe')) { io.observe(el); return; }
-    var p = el.parentElement; if (!wipeKids.has(p)) { wipeKids.set(p, []); io.observe(p); }
-    wipeKids.get(p).push(el);
-  });
-  window.addEventListener('beforeprint', function () { targets.forEach(function (el) { el.classList.add('in'); }); });
 })();
