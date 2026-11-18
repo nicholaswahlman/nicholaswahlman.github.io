@@ -5,3 +5,4 @@ Personal portfolio of Nicholas A. Wahlman, Civil Engineering student at Trine Un
 Live site: https://nicholaswahlman.github.io
 
 A static site: plain HTML, CSS and JavaScript, with no build step and no trackers.
+
